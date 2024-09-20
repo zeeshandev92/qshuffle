@@ -1,0 +1,42 @@
+{
+    "menu": [
+        {
+            "menuHeader": "Main"
+        },
+        {
+            "url": "dashboard",
+            "name": "Dashboards",
+            "icon": "ph-house",
+            "slug": "dashboard"
+        },
+        {
+            "url": "relations",
+            "name": "Relations",
+            "icon": "ph-link",
+            "slug": "relations"
+        },
+        {
+            "name": "Users",
+            "icon": "ph-users",
+            "slug": "users",
+            "url": "users"
+        },
+        {
+            "name": "Settings",
+            "icon": "ph-gear-six",
+            "slug": "settings",
+            "submenu": [
+                {
+                    "url": "resume/education",
+                    "name": "Education",
+                    "slug": "education"
+                },
+                {
+                    "url": "resume/experiences",
+                    "name": "Experience",
+                    "slug": "experiences"
+                }
+            ]
+        }
+    ]
+}

@@ -10,6 +10,12 @@
             "slug": "dashboard"
         },
         {
+            "url": "questions",
+            "name": "Questions",
+            "icon": "ph-question",
+            "slug": "questions"
+        },
+        {
             "url": "relations",
             "name": "Relations",
             "icon": "ph-link",
@@ -20,6 +26,18 @@
             "icon": "ph-users",
             "slug": "users",
             "url": "users"
+        },
+        {
+            "name": "Admins",
+            "icon": "ph-user-focus",
+            "slug": "users",
+            "url": "users"
+        },
+        {
+            "name": "Roles",
+            "icon": "ph-lock",
+            "slug": "roles",
+            "url": "roles"
         },
         {
             "name": "Settings",

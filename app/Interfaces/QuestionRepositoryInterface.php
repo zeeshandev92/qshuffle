@@ -2,11 +2,9 @@
 
 namespace App\Interfaces;
 
-interface RelationRepositoryInterface
+interface QuestionRepositoryInterface
 {
     public function list();
-
-    public function activeList();
 
     public function storeOrUpdate(array $data, int $id = null);
 

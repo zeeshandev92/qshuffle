@@ -2,23 +2,23 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\RelationRepositoryInterface;
-use App\Models\Relation;
+use App\Interfaces\QuestionRepositoryInterface;
+use App\Models\Question;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class RelationRepository implements RelationRepositoryInterface
+class QuestionRepository implements QuestionRepositoryInterface
 {
 
     protected $model;
 
-    public function __construct(Relation $model)
+    public function __construct(Question $model)
     {
         $this->model = $model;
     }
 
     /**
-     * All relation list.
+     * All Question list.
      */
     public function list(): array|Collection
     {
@@ -26,17 +26,9 @@ class RelationRepository implements RelationRepositoryInterface
     }
 
     /**
-     * Active relation list.
+     * Create & save Question.
      */
-    public function activeList(): Collection
-    {
-        return $this->model->where('status', 1)->get();
-    }
-
-    /**
-     * Create & save relation.
-     */
-    public function storeOrUpdate(array $data, int $id = null): Relation
+    public function storeOrUpdate(array $data, int $id = null): Question
     {
         return $this->model->updateOrCreate(
             ['id' => $id],
@@ -45,15 +37,15 @@ class RelationRepository implements RelationRepositoryInterface
     }
 
     /**
-     * Find relation by id.
+     * Find Question by id.
      */
-    public function findById($id): array|Collection|Model|Relation|null
+    public function findById($id): array|Collection|Model|Question|null
     {
         return $this->model->find($id);
     }
 
     /**
-     * Delete relation by id.
+     * Delete Question by id.
      */
     public function destroyById($id): bool|null
     {

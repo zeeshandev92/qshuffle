@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role as SpetieRole;
 
-class Relation extends Model
+class Role extends SpetieRole
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'status'];
+    protected $fillable = [
+        'guard_name',
+        'name'
+    ];
 }

@@ -16,6 +16,12 @@ class Controller extends BaseController
         return redirect($route)->with('success', $message);
     }
 
+
+    public function redirectBackWithSuccess($message)
+    {
+        return back()->with('success', $message);
+    }
+
     public function redirectError($message): RedirectResponse
     {
         return back()->withErrors(['msg' => $message]);

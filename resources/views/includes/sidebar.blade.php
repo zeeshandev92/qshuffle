@@ -32,111 +32,53 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
-                @foreach ($menuData->menu as $menu)
-                    {{-- adding active and open class if child is active --}}
+                @can('dashboard-view')
+                    <x-nav-item route="dashboard" icon="house" title="Dashboards" />
+                @endcan
 
-                    {{-- menu headers --}}
-                    @if (isset($menu->menuHeader))
-                        <li class="nav-item-header pt-0">
-                            <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">
-                                {{ $menu->menuHeader }}</div>
-                            <i class="ph-dots-three sidebar-resize-show"></i>
-                        </li>
-                    @else
-                        {{-- active menu method --}}
-                        @php
-                            $activeClass = null;
-                            $currentRouteName = Route::currentRouteName();
+                @can('questions-list')
+                    <x-nav-item route="questions.index" active='questions.*' icon="question" title="Question" />
+                @endcan
 
-                            if (str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0 && !isset($menu->submenu)) {
-                                $activeClass = 'active';
-                            } elseif (isset($menu->submenu)) {
-                                if (gettype($menu->slug) === 'array') {
-                                    foreach ($menu->slug as $slug) {
-                                        if (str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) {
-                                            $activeClass = 'nav-item-expanded nav-item-open';
-                                        }
-                                    }
-                                } else {
-                                    if (str_contains($currentRouteName, $menu->slug) and strpos($currentRouteName, $menu->slug) === 0) {
-                                        $activeClass = 'nav-item-expanded nav-item-open';
-                                    }
-                                }
-                            }
-                        @endphp
+                @can('relations-list')
+                    <x-nav-item route="relations.index" active='relations.*' icon="link" title="Relations" />
+                @endcan
 
-                        {{-- main menu --}}
-                        <li class="nav-item {{ isset($menu->submenu) ? 'nav-item-submenu' : '' }}">
-                            <a href="{{ $menu->url ?? 'javascript:void(0);' }}" class="nav-link {{ $activeClass }}"
-                                @if (isset($menu->target) and !empty($menu->target)) target="_blank" @endif>
+                {{--
 
-                                @isset($menu->icon)
-                                    <i class="{{ $menu->icon }}"></i>
-                                @endisset
+                @can('users-list')
+                    <x-nav-item route="users" icon="users" title="Users" />
+                @endcan
 
-                                <span>
-                                    {{ $menu->name ?? '' }}
-                                    @isset($menu->subtitle)
-                                        <span class="d-block fw-normal opacity-50">{{ $menu->subtitle }}</span>
-                                    @endisset
-                                </span>
+                @can('users-list')
+                    <x-nav-item route="users" icon="users" title="Users" />
+                @endcan
 
-                                @isset($menu->badge)
-                                    <span class="badge bg-{{ $menu->badge[0] }} align-self-center rounded-pill ms-auto">
-                                        {{ $menu->badge[1] }}
-                                    </span>
-                                @endisset
-                            </a>
+                --}}
 
-                            {{-- submenu --}}
-                            @isset($menu->submenu)
-                                @include('includes.submenu', ['menu' => $menu->submenu])
-                            @endisset
-
-                        </li>
-                    @endif
-                @endforeach
+                @can('roles-list')
+                    <x-nav-item route="roles.index" active='roles.*' icon="lock" title="Roles" />
+                @endcan
 
 
-                <!-- Main -->
-                {{-- <li class="nav-item-header pt-0">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Main</div>
-                    <i class="ph-dots-three sidebar-resize-show"></i>
-                </li>
 
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
-                        <i class="ph-house"></i>
-                        <span>
-                            Dashboard
-                            <span class="d-block fw-normal opacity-50">No pending orders</span>
-                        </span>
-                    </a>
-                </li> --}}
 
-                {{-- <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-layout"></i>
-                        <span>Layouts</span>
-                    </a>
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a href="index.html" class="nav-link active">Default layout</a>
-                        </li>
-                        <li class="nav-item"><a href="../../layout_2/full/index.html" class="nav-link">Layout
-                                2</a></li>
-                        <li class="nav-item"><a href="../../layout_3/full/index.html" class="nav-link">Layout
-                                3</a></li>
-                        <li class="nav-item"><a href="../../layout_4/full/index.html" class="nav-link">Layout
-                                4</a></li>
-                        <li class="nav-item"><a href="../../layout_5/full/index.html" class="nav-link">Layout
-                                5</a></li>
-                        <li class="nav-item"><a href="../../layout_6/full/index.html" class="nav-link">Layout
-                                6</a></li>
-                        <li class="nav-item"><a href="../../layout_7/full/index.html" class="nav-link disabled">Layout 7
-                                <span class="badge align-self-center ms-auto">Coming soon</span></a></li>
-                    </ul>
-                </li> --}}
 
+
+                {{-- @canany(['shopSettings-create', 'templateSettings-create', 'adminSettings-create'])
+                    <x-nav-item active="settings.*" icon="gear-six" title="Settings" :submenu="true">
+                        @can('shopSettings-create')
+                            <x-nav-item route="settings.shop" title="Shop" />
+                        @endcan
+                        @can('adminSettings-create')
+                            <x-nav-item route="settings.admin" title="Admin" />
+                        @endcan
+                        @can('templateSettings-create')
+                            <x-nav-item active="settings.template.*" route="settings.template.index" title="Template" />
+                        @endcan
+                        <x-nav-item active="settings.systemLogs.*" route="settings.system-logs.index" title="System Logs" />
+                    </x-nav-item>
+                @endcanany --}}
 
             </ul>
         </div>

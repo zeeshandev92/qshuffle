@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('mobile_no')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('mobile_verified_at')->nullable();
             $table->string('password');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->enum('type', ['admin', 'app'])->default('app');

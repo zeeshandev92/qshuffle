@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Interfaces\{
+    PlanRepositoryInterface,
     QuestionRepositoryInterface,
     RelationRepositoryInterface,
     RoleRepositoryInterface
 };
 use App\Repositories\{
+    PlanRepository,
     RelationRepository,
     RoleRepository,
     QuestionRepository
@@ -24,6 +26,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RelationRepositoryInterface::class, RelationRepository::class);
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
         $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
+        $this->app->bind(PlanRepositoryInterface::class, PlanRepository::class);
     }
 
     /**

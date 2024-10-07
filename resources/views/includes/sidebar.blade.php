@@ -40,6 +40,10 @@
                     <x-nav-item route="questions.index" active='questions.*' icon="question" title="Question" />
                 @endcan
 
+                @can('plans-list')
+                    <x-nav-item route="plans.index" active='plans.*' icon="clipboard-text" title="Plans" />
+                @endcan
+
                 @can('relations-list')
                     <x-nav-item route="relations.index" active='relations.*' icon="link" title="Relations" />
                 @endcan

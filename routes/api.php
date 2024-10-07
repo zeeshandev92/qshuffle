@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RelationController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ ROute::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('login', 'login');
 });
 
+ROute::controller(RelationController::class)->group(function () {
+    Route::get('relations', 'relationsList');
+});
 
 
 

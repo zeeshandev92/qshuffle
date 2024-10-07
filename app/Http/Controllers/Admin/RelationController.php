@@ -20,6 +20,10 @@ class RelationController extends Controller
         $this->middleware('permission:relations-delete', ['only' => ['destroy']]);
     }
 
+    public function relationsList(){
+        $data = $this->relationRepository->list();
+        return $this->apiResponse(result: $data, message: 'Relations List.');
+    }
     /**
      * Display a listing of the resource.
      */

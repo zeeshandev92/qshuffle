@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\OTP;
 use App\Models\User;
+use App\Traits\AuthTrait;
 use Carbon\Carbon;
 use ErrorException;
 use Exception;
@@ -17,6 +18,7 @@ use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
+    use AuthTrait;
 
     public function login(Request $request)
     {
@@ -50,16 +52,14 @@ class AuthController extends Controller
 
 
 
-            $user = User::where('mobile_no', $request->mobile_no)
-                ->whereNotNull('mobile_verified_at')->first();
+            $user = User::where('mobile_no', $request->mobile_no)->first();
 
-            if (is_null($user)) {
+            if (is_null($user->mobile_verified_at)) {
                 throw new  ErrorException('The mobile number is not verified.', 400);
             }
 
             $user->update(
                 [
-                    'name' => $request->name,
                     'password' => $request->password,
                     'gender' => $request->gender,
                 ]
@@ -84,9 +84,6 @@ class AuthController extends Controller
                 'name' => 'required',
             ]);
 
-            $otp = rand(1000, 9999);
-
-
             User::firstOrCreate(
                 [
                     'mobile_no' => $request->mobile_no,
@@ -98,22 +95,8 @@ class AuthController extends Controller
                 ]
             );
 
-            // $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
+            $otp = $this->generateOTP($request->mobile_no);
 
-            // $twilio->messages->create(
-            //     $request->mobile, // The user's phone number
-            //     [
-            //         'from' => env('TWILIO_PHONE_NUMBER'), // Your Twilio number
-            //         'body' => "Your OTP is $otp"
-            //     ]
-            // );
-
-            // Save OTP to database with expiration time (e.g., 5 minutes)
-            OTP::create([
-                'mobile_no' => $request->mobile_no,
-                'otp' => $otp,
-                'expires_at' => Carbon::now()->addMinutes(5)
-            ]);
             DB::commit();
             return $this->apiResponse(result: ['otp' => $otp], message: 'OTP sent successfully and validated for 5 minutes.');
         } catch (\Throwable $th) {
@@ -123,7 +106,7 @@ class AuthController extends Controller
     }
 
     // Verify OTP
-    public function verifyOtp(Request $request): JsonResponse
+    public function verifyOTP(Request $request): JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -132,10 +115,7 @@ class AuthController extends Controller
                 'otp' => 'required'
             ]);
 
-            $otpRecord = Otp::where('mobile_no', $request->mobile_no)
-                ->where('otp', $request->otp)
-                ->where('expires_at', '>=', Carbon::now())
-                ->first();
+            $otpRecord = $this->otpVerification($request->mobile_no, $request->otp);
 
             if (!$otpRecord) {
                 return $this->apiException('Invalid or expired OTP.', 400);
@@ -146,7 +126,55 @@ class AuthController extends Controller
             ]);
 
             DB::commit();
-            return $this->apiResponse(message: 'OTP verified successfully');
+            return $this->apiResponse(message: 'User verified successfully');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->apiException($th->getMessage());
+        }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $request->validate([
+                'mobile_no' => 'required|exists:users',
+            ]);
+
+            $otp = $this->generateOTP($request->mobile_no);
+            User::where('mobile_no', $request->mobile_no)->update([
+                'mobile_verified_at' => null,
+            ]);
+
+            DB::commit();
+            return $this->apiResponse(result: ['otp' => $otp], message: 'OTP sent successfully and validated for 5 minutes.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->apiException($th->getMessage());
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $request->validate([
+                'mobile_no' => 'required|exists:users',
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
+
+            $user = User::where('mobile_no', $request->mobile_no)->first();
+
+            if (is_null($user->mobile_verified_at)) {
+                throw new  ErrorException('The mobile number is not verified.', 400);
+            }
+
+            $user->update([
+                'password' => $request->password,
+            ]);
+
+            DB::commit();
+            return $this->apiResponse(message: 'Password reset successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->apiException($th->getMessage());

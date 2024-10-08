@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\RelationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\InviteeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,19 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-ROute::controller(AuthController::class)->prefix('auth')->group(function () {
+Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('send-otp', 'sendOTP');
     Route::post('verify-otp', 'verifyOTP');
     Route::post('register', 'register');
     Route::post('login', 'login');
+    Route::post('forgot-password', 'forgotPassword');
+    Route::post('reset-password', 'resetPassword');
 });
 
-ROute::controller(RelationController::class)->group(function () {
+Route::controller(RelationController::class)->group(function () {
     Route::get('relations', 'relationsList');
 });
 
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('invitee', InviteeController::class)->only(['store', 'update']);
 });

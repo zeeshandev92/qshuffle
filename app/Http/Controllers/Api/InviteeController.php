@@ -42,7 +42,7 @@ class InviteeController extends Controller
             $invitee = Invitee::where('code', $code)
                 ->where('status', 'pending')->first();
 
-            if ($invitee->status == 'pending') {
+            if ($invitee->status == 'accepted') {
                 throw new  ErrorException('Invalid Link.', 400);
             }
 

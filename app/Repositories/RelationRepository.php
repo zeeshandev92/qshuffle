@@ -20,9 +20,9 @@ class RelationRepository implements RelationRepositoryInterface
     /**
      * All relation list.
      */
-    public function list(): array|Collection
+    public function list($lang = 'en'): array|Collection
     {
-        return $this->model->latest()->get();
+        return $this->model->where('language', $lang)->latest()->get();
     }
 
     /**

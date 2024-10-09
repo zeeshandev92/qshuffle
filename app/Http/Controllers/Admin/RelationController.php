@@ -20,7 +20,8 @@ class RelationController extends Controller
         $this->middleware('permission:relations-delete', ['only' => ['destroy']]);
     }
 
-    public function relationsList(){
+    public function relationsList($language)
+    {
         $data = $this->relationRepository->list();
         return $this->apiResponse(result: $data, message: 'Relations List.');
     }
@@ -34,7 +35,7 @@ class RelationController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->editColumn('status', function ($row) {
-                    return $row->status? 'Active' : 'InActive' ;
+                    return $row->status ? 'Active' : 'InActive';
                 })
                 ->addColumn('action', function ($row) {
                     return view('pages.relations.actions', compact('row'));

@@ -33,6 +33,7 @@ class AuthController extends Controller
                 $user = Auth::user();
                 $user->token = $user->createToken("API TOKEN")->plainTextToken;
             }
+            $user->makeHidden('email', 'email_verified_at', 'type', 'created_at', 'updated_at');
             return $this->apiResponse(result: $user, message: 'User login successfully');
         } catch (\Throwable $th) {
             return $this->apiException($th->getMessage());
@@ -62,11 +63,10 @@ class AuthController extends Controller
                 [
                     'password' => $request->password,
                     'gender' => $request->gender,
+                    'relation_id' => $request->relation_id,
                 ]
             );
-
-            $user->relations()->attach($request->relation_id);
-
+            $user->makeHidden('email', 'email_verified_at', 'type', 'created_at', 'updated_at');
             DB::commit();
             return $this->apiResponse(result: $user, message: 'User registered successfully.');
         } catch (\Throwable $th) {

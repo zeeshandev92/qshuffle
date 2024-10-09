@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->enum('type', ['admin', 'app'])->default('app');
+            $table->unsignedBigInteger('relation_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

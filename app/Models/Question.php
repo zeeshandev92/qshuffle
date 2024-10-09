@@ -16,7 +16,8 @@ class Question extends Model
         'type',
         'choices',
         'gender',
-        'is_required'
+        'is_required',
+        'language',
     ];
 
     /**

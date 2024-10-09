@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\RelationController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\InviteeController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,11 +28,15 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
 });
 
 Route::controller(RelationController::class)->group(function () {
-    Route::get('relations', 'relationsList');
+    Route::get('relations/{language}', 'relationsList');
 });
 
 
+Route::put('invitee/{code}',  [InviteeController::class, 'update']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('invitee', InviteeController::class)->only(['store', 'update']);
+
+    Route::post('invitee',  [InviteeController::class, 'store']);
+
+    Route::apiResource('user', UserController::class)->only(['index', 'update']);
 });

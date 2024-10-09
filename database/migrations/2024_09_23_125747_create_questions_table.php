@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->string('language')->default('en');
             $table->text('question');
             $table->foreignId('relation_id')->constrained()->cascadeOnDelete();
             $table->enum('type', ['free_text', 'multiple_choice'])->default('free_text');

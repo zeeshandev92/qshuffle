@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitee;
+use ErrorException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class InviteeController extends Controller
 
             $invitee = Invitee::create([
                 'user_id' => auth()->user()->id,
-                'code' => uniqid(),
+                'relation_id' => auth()->user()->relation_id,
                 'questions_length' => $request->questions_length
             ]);
 
@@ -38,7 +39,14 @@ class InviteeController extends Controller
         try {
             DB::beginTransaction();
 
-            $invitee = Invitee::where('user_id', $request->user_id)->where('code', $code)->update([
+            $invitee = Invitee::where('code', $code)
+                ->where('status', 'pending')->first();
+
+            if ($invitee->status == 'pending') {
+                throw new  ErrorException('Invalid Link.', 400);
+            }
+
+            $invitee->update([
                 'gender' => $request->get('gender'),
                 'status' => 'accepted',
             ]);

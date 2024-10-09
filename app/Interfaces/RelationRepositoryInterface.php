@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface RelationRepositoryInterface
 {
-    public function list();
+    public function list($lang = 'en');
 
     public function activeList();
 

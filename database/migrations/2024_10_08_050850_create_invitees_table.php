@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('invitees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->uuid('code');
+            $table->foreignId('relation_id')->constrained()->cascadeOnDelete();
+            $table->text('code');
             $table->unsignedInteger('questions_length');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('status')->default('pending');

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('relations', function (Blueprint $table) {
             $table->id();
+            $table->string('language')->default('en');
             $table->string('title');
             $table->boolean('status')->default(1);
             $table->timestamps();

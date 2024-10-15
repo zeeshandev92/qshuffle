@@ -32,6 +32,7 @@ Route::controller(RelationController::class)->group(function () {
 });
 
 
+Route::get('invitee',  [InviteeController::class, 'index']);
 Route::put('invitee/{code}',  [InviteeController::class, 'update']);
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -29,6 +29,7 @@ class User extends Authenticatable
         'email',
         'password',
         'relation_id',
+        'is_subscribed',
     ];
 
     /**
@@ -50,6 +51,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'mobile_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_subscribed' => 'bool',
     ];
 
     /**

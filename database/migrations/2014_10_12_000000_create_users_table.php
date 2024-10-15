@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->enum('type', ['admin', 'app'])->default('app');
             $table->unsignedBigInteger('relation_id')->nullable();
+            $table->boolean('is_subscribed')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

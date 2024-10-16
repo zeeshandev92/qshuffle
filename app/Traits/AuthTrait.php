@@ -33,7 +33,7 @@ trait AuthTrait
     {
         $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
         $verification_check = $twilio->verify->v2
-            ->services("VAcd8983ab39ff02bd6c77127a2eb0d2e1")
+            ->services(env('TWILIO_API_SERVICE_ID'))
             ->verificationChecks->create([
                 "to" => $mobileNo,
                 "code" => $otp,

@@ -15,7 +15,7 @@ trait AuthTrait
 
         $twilio = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $verification = $twilio->verify->v2->services("VAcd8983ab39ff02bd6c77127a2eb0d2e1")
+        $verification = $twilio->verify->v2->services("VA6e1ac1b5ea7cef36401eabe0b6a309c7")
             ->verifications
             ->create($mobileNo, "sms");
 
@@ -38,7 +38,7 @@ trait AuthTrait
                 "to" => $mobileNo,
                 "code" => $otp,
             ]);
-            
+
         return $verification_check->status;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitee;
+use App\Models\InviteeQuestion;
 use App\Models\Question;
 use App\Models\User;
 use ErrorException;
@@ -103,6 +104,58 @@ class InviteeController extends Controller
             // dd($inviteeQuestionIds);
             DB::commit();
             return $this->apiResponse(result: null, message: 'Invitation accepted successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->apiException($th->getMessage());
+        }
+    }
+
+
+    public function question(Request $request): JsonResponse
+    {
+        try {
+
+            $request->validate([
+                'code' => 'required',
+                'question_id' => 'required',
+                'answer' => 'required',
+            ]);
+            DB::beginTransaction();
+
+            $invitee = Invitee::where('code', $request->code)
+                ->where('status', 'accepted')->firstOrFail();
+
+            InviteeQuestion::where('invitee_id', $invitee->id)->where('question_id', $request->question_id)->update([
+                'answer' => $request->answer
+            ]);
+
+            DB::commit();
+            return $this->apiResponse(result: null, message: 'Answer submitted successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->apiException($th->getMessage());
+        }
+    }
+
+    public function status(Request $request): JsonResponse
+    {
+        try {
+
+            $request->validate([
+                'code' => 'required',
+                // 'status' => 'required',
+            ]);
+            DB::beginTransaction();
+
+            $invitee = Invitee::where('code', $request->code)
+                ->where('status', 'accepted')->firstOrFail();
+
+            $invitee->update([
+                'status' => 'cancelled'
+            ]);
+
+            DB::commit();
+            return $this->apiResponse(result: null, message: 'Session cancelled successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->apiException($th->getMessage());

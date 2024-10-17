@@ -32,6 +32,6 @@ class Invitee extends Model
 
     public function questions(): BelongsToMany
     {
-        return $this->belongsToMany(Question::class, 'invitee_questions', 'invitee_id', 'question_id')->withPivot('type');
+        return $this->belongsToMany(Question::class, 'invitee_questions', 'invitee_id', 'question_id')->withPivot('type', 'id', 'answer');
     }
 }

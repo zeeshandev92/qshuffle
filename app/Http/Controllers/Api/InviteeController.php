@@ -66,7 +66,7 @@ class InviteeController extends Controller
                 'gender' => 'required|in:male,female',
                 'language' => 'required',
             ]);
-            Log::info("Invitation accepted....", $request->all());
+            // Log::info("Invitation accepted....", $request->all());
             DB::beginTransaction();
 
             $invitee = Invitee::where('code', $code)
@@ -89,7 +89,7 @@ class InviteeController extends Controller
                     ->take($invitee->questions_length * 2)
                     ->pluck('id');
                 $chunks = $questionIds->split(2);
-                Log::info("Invitation accepted....", $chunks);
+                // Log::info("Invitation accepted....", $chunks);
                 $invitee->questions()->attach($chunks->get(0), ['type' => 'invitee']);
                 $invitee->questions()->attach($chunks->get(1), ['type' => 'inviter']);
             } else {
@@ -100,7 +100,7 @@ class InviteeController extends Controller
                     ->take($invitee->questions_length)
                     ->pluck('id');
                 // dd($inviteeQuestionIds, $inviterQuestionIds);
-                Log::info("Invitation accepted....", ['invitee' => $inviteeQuestionIds, 'inviter' => $inviterQuestionIds]);
+                // Log::info("Invitation accepted....", ['invitee' => $inviteeQuestionIds, 'inviter' => $inviterQuestionIds]);
                 $invitee->questions()->attach($inviteeQuestionIds, ['type' => 'invitee']);
                 $invitee->questions()->attach($inviterQuestionIds, ['type' => 'inviter']);
             }

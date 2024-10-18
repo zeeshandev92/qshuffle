@@ -63,17 +63,17 @@ class InviteeController extends Controller
     {
         try {
             $request->validate([
-                'gender' => 'required',
+                'gender' => 'required|in:male,female',
                 'language' => 'required',
             ]);
             Log::info("Invitation accepted....", $request->all());
             DB::beginTransaction();
 
             $invitee = Invitee::where('code', $code)
-                ->where('status', 'pending')->firstOrFail();
+                ->where('status', 'pending')->first();
 
-            if ($invitee->status == 'accepted') {
-                throw new  ErrorException('Invalid Link.', 400);
+            if ($invitee->status != 'pending') {
+                throw new  ErrorException('Invalid Link or Link is already accepted.', 400);
             }
             $user = User::find($invitee->user_id);
             $invitee->update([

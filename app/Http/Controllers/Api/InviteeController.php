@@ -11,6 +11,7 @@ use ErrorException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class InviteeController extends Controller
@@ -65,6 +66,7 @@ class InviteeController extends Controller
                 'gender' => 'required',
                 'language' => 'required',
             ]);
+            Log::info("Invitation accepted....", $request->all());
             DB::beginTransaction();
 
             $invitee = Invitee::where('code', $code)
@@ -87,6 +89,7 @@ class InviteeController extends Controller
                     ->take($invitee->questions_length * 2)
                     ->pluck('id');
                 $chunks = $questionIds->split(2);
+                Log::info("Invitation accepted....", $chunks);
                 $invitee->questions()->attach($chunks->get(0), ['type' => 'invitee']);
                 $invitee->questions()->attach($chunks->get(1), ['type' => 'inviter']);
             } else {
@@ -97,6 +100,7 @@ class InviteeController extends Controller
                     ->take($invitee->questions_length)
                     ->pluck('id');
                 // dd($inviteeQuestionIds, $inviterQuestionIds);
+                Log::info("Invitation accepted....", ['invitee' => $inviteeQuestionIds, 'inviter' => $inviterQuestionIds]);
                 $invitee->questions()->attach($inviteeQuestionIds, ['type' => 'invitee']);
                 $invitee->questions()->attach($inviterQuestionIds, ['type' => 'inviter']);
             }

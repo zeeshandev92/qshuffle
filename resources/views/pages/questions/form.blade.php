@@ -14,11 +14,6 @@
         <option value="female" @selected(isset($question->gender) && $question->gender == 'female')>Female</option>
     </x-input>
 
-    <x-input name="language" type="select" :required="true">
-        <option value="en" @selected(isset($question->language) && $question->language == 'en')>English</option>
-        <option value="ar" @selected(isset($question->language) && $question->language == 'ar')>Arabic</option>
-    </x-input>
-
     <x-input col="12" type="textarea" name="question" :value="$question->question ?? null" :required="true" />
 
 </div>

@@ -9,5 +9,10 @@ class Relation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'status', 'language'];
+    protected $fillable = ['title', 'status'];
+
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class, 'translated_relations', 'relation_id', 'language_id')->withPivot('translated_relation');
+    }
 }

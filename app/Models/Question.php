@@ -17,7 +17,6 @@ class Question extends Model
         'choices',
         'gender',
         'is_required',
-        'language',
     ];
 
     /**
@@ -35,5 +34,11 @@ class Question extends Model
     public function relation(): BelongsTo
     {
         return $this->belongsTo(Relation::class, 'relation_id');
+    }
+
+
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class, 'translated_questions', 'question_id', 'language_id')->withPivot('translated_question', 'choices');
     }
 }

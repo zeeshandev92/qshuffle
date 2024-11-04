@@ -48,6 +48,14 @@
                     <x-nav-item route="relations.index" active='relations.*' icon="link" title="Relations" />
                 @endcan
 
+                @can('languages-list')
+                    <x-nav-item route="language.index" active="language.*" icon="translate" title="Languages" />
+                @endcan
+
+                @can('appString-list')
+                    <x-nav-item route="app-strings.index" active="app-strings.*" icon="article" title="App Strings" />
+                @endcan
+
                 {{--
 
                 @can('users-list')

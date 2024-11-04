@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('relations', function (Blueprint $table) {
+        Schema::create('translated_strings', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->boolean('status')->default(1);
+            $table->foreignId('language_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('app_string_id')->constrained()->cascadeOnDelete();
+            $table->text('translated_text');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('relations');
+        Schema::dropIfExists('translated_strings');
     }
 };

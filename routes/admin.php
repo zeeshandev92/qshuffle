@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AppStringController;
+use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\RelationController;
@@ -22,10 +24,19 @@ Route::get('/dashboard', function () {
 Route::resource('roles', RoleController::class);
 
 /* ----------------------------- Relation Route ----------------------------- */
-Route::resource('relations', RelationController::class)->except(['show']);
+Route::resource('relations', RelationController::class);
 
 /* ----------------------------- Questions Route ----------------------------- */
-Route::resource('questions', QuestionController::class)->except(['show']);
+Route::resource('questions', QuestionController::class);
 
 /* ----------------------------- Plan Route ----------------------------- */
-Route::resource('plans', PlanController::class)->except(['show']);
+Route::resource('plans', PlanController::class);
+
+/* ----------------------------- Language Route ----------------------------- */
+Route::patch('language/change/{id}', 'LanguageController@change')->name('language.change');
+Route::get('language/translate-strings/{id}', 'LanguageController@translateStrings')->name('language.translate-strings');
+Route::post('language/update-translation', 'LanguageController@updateTranslation')->name('language.update-translation');
+Route::resource('language', LanguageController::class)->except(['create']);
+
+/* ----------------------------- App Strings Route ----------------------------- */
+Route::resource('app-strings', AppStringController::class)->except(['show', 'create']);

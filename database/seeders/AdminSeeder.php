@@ -15,7 +15,7 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::firstOrNew(['email' =>  'admin@admin.com']);
+        $user = User::firstOrNew(['email' =>  'superadmin@gmail.com']);
         $user->name = 'Super Admin';
         $user->password = 'password';
         $user->type = 'admin';

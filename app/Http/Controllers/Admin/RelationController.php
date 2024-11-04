@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\LanguageRepositoryInterface;
 use App\Interfaces\RelationRepositoryInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class RelationController extends Controller
 {
     public function __construct(
         private RelationRepositoryInterface $relationRepository,
+        private LanguageRepositoryInterface $languageRepository,
     ) {
         $this->middleware('permission:relations-list', ['only' => ['index', 'show']]);
         $this->middleware('permission:relations-create', ['only' => ['store']]);
@@ -53,7 +56,8 @@ class RelationController extends Controller
      */
     public function create(): View
     {
-        return view('pages.relations.create');
+        $languages =  $this->languageRepository->activeList();
+        return view('pages.relations.create', compact('languages'));
     }
 
     /**
@@ -62,12 +66,16 @@ class RelationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
+            DB::beginTransaction();
             $request->validate([
                 'title' => 'required',
             ]);
+
             $data = $request->only(['title', 'status']);
             $this->relationRepository->storeOrUpdate($data);
+            Db::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $this->redirectError($th->getMessage());
         }
         return $this->redirectSuccess(route('relations.index'), 'Data created successfully.');
@@ -87,18 +95,26 @@ class RelationController extends Controller
         return $editModal;
     }
 
+    public function show(string $id){
+        $relation = $this->relationRepository->findById($id);
+        return view('pages.relations.show', compact('relation'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id): RedirectResponse
     {
         try {
+            DB::beginTransaction();
             $request->validate([
                 'title' => 'required',
             ]);
             $data = $request->only(['title', 'status']);
             $this->relationRepository->storeOrUpdate($data, $id);
+            Db::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $this->redirectError($th->getMessage());
         }
         return $this->redirectSuccess(route('relations.index'), 'Data updated successfully.');

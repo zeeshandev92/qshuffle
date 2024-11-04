@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use App\Interfaces\QuestionRepositoryInterface;
 use App\Models\Question;
+use App\Traits\TranslateTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class QuestionRepository implements QuestionRepositoryInterface
 {
+    use TranslateTrait;
 
     protected $model;
 
@@ -30,10 +32,19 @@ class QuestionRepository implements QuestionRepositoryInterface
      */
     public function storeOrUpdate(array $data, int $id = null): Question
     {
-        return $this->model->updateOrCreate(
+        $question =  $this->model->updateOrCreate(
             ['id' => $id],
             $data
         );
+        // $questions = $this->translateToAllLanguages([$question->question]);
+        $choices = $this->translateToAllLanguages([json_encode($question->choices)]);
+        dd($choices);
+        $translations = $response->mapWithKeys(function ($item) {
+            return [$item['language_id'] => ['translated_relation' => $item['text']]];
+        })->toArray();
+        $question->languages()->sync($translations);
+
+        return $question;
     }
 
     /**

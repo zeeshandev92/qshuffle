@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class QuestionController extends Controller
@@ -59,19 +60,20 @@ class QuestionController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
+            DB::beginTransaction();
             $validatedReq = $request->validate([
                 'relation_id' => 'required',
                 'gender' => 'required',
                 'question' => 'required',
                 'type' => 'required',
-                'choices' => 'array|required_if:type,in:multiple_choice'
+                'choices.*' => 'string|required_if:type,in:multiple_choice'
             ]);
 
             $this->questionRepository->storeOrUpdate($validatedReq);
-
+            DB::commit();
             return $this->redirectBackWithSuccess('Data Saved Successfully.');
         } catch (\Throwable $th) {
-            //throw $th;
+            DB::rollBack();
             return $this->redirectError($th->getMessage());
         }
     }
@@ -100,6 +102,7 @@ class QuestionController extends Controller
     public function update(Request $request, string $id): RedirectResponse
     {
         try {
+            DB::beginTransaction();
             $validatedReq = $request->validate([
                 'relation_id' => 'required',
                 'gender' => 'required',
@@ -113,10 +116,10 @@ class QuestionController extends Controller
             }
 
             $this->questionRepository->storeOrUpdate($validatedReq, $id);
-
+            DB::commit();
             return $this->redirectSuccess(route('questions.index'), 'Data Updated Successfully.');
         } catch (\Throwable $th) {
-            //throw $th;
+            DB::rollBack();
             return $this->redirectError($th->getMessage());
         }
     }

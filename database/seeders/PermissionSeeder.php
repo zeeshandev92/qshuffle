@@ -40,6 +40,16 @@ class PermissionSeeder extends Seeder
             'plans-edit',
             'plans-delete',
 
+            'appString-list',
+            'appString-create',
+            'appString-edit',
+            'appString-delete',
+
+            'languages-list',
+            'languages-create',
+            'languages-edit',
+            'languages-delete',
+
         ];
 
         foreach ($permissions as $permission) {

@@ -22,7 +22,7 @@ class RelationController extends Controller
 
     public function relationsList($language)
     {
-        $data = $this->relationRepository->list();
+        $data = $this->relationRepository->list($language)->where('status', 1);
         return $this->apiResponse(result: $data, message: 'Relations List.');
     }
     /**
@@ -64,8 +64,9 @@ class RelationController extends Controller
         try {
             $request->validate([
                 'title' => 'required',
+                'language' => 'required',
             ]);
-            $data = $request->only(['title', 'status']);
+            $data = $request->only(['title', 'status', 'language']);
             $this->relationRepository->storeOrUpdate($data);
         } catch (\Throwable $th) {
             return $this->redirectError($th->getMessage());
@@ -96,7 +97,7 @@ class RelationController extends Controller
             $request->validate([
                 'title' => 'required',
             ]);
-            $data = $request->only(['title', 'status']);
+            $data = $request->only(['title', 'status', 'language']);
             $this->relationRepository->storeOrUpdate($data, $id);
         } catch (\Throwable $th) {
             return $this->redirectError($th->getMessage());

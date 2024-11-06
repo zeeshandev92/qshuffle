@@ -64,6 +64,7 @@ class QuestionController extends Controller
                 'gender' => 'required',
                 'question' => 'required',
                 'type' => 'required',
+                'language' => 'required',
                 'choices' => 'array|required_if:type,in:multiple_choice'
             ]);
 
@@ -104,6 +105,7 @@ class QuestionController extends Controller
                 'relation_id' => 'required',
                 'gender' => 'required',
                 'question' => 'required',
+                'language' => 'required',
                 'type' => 'required',
                 'choices' => 'array|required_if:type,in:multiple_choice'
             ]);

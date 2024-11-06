@@ -20,10 +20,11 @@
                     <div class="card-header">
                         <h5 class="mb-0">List</h5>
                     </div>
-                    <x-datatable :url="route('questions.index')" :index="['DT_RowIndex', 'question', 'relation', 'gender', 'action']">
+                    <x-datatable :url="route('questions.index')" :index="['DT_RowIndex', 'question', 'relation', 'language', 'gender', 'action']">
                         <th>No</th>
                         <th>Question</th>
                         <th>Relation</th>
+                        <th>Language</th>
                         <th>Gender</th>
                         <th>Actions</th>
                     </x-datatable>

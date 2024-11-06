@@ -126,8 +126,10 @@ class InviteeController extends Controller
             ]);
             DB::beginTransaction();
 
-            $invitee = Invitee::where('code', $request->code)
-                ->where('status', 'accepted')->firstOrFail();
+            $invitee = Invitee::where('code', $request->code)->firstOrFail();
+            if ($invitee->status != 'accepted') {
+                return $this->apiException('Session cancelled.');
+            }
 
             InviteeQuestion::where('invitee_id', $invitee->id)->where('question_id', $request->question_id)->update([
                 'answer' => $request->answer

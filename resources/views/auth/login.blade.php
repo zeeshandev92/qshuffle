@@ -44,9 +44,9 @@
                             <span class="form-check-label">Remember</span>
                         </label>
 
-                        @if (Route::has('password.request'))
+                        {{-- @if (Route::has('password.request'))
                             <a href="{{ route('password.request') }}" class="ms-auto">Forgot password?</a>
-                        @endif
+                        @endif --}}
                     </div>
 
                     <div class="mb-3">

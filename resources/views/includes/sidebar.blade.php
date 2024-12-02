@@ -32,27 +32,27 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
-                @can('dashboard-view')
+                {{-- @can('dashboard-view')
                     <x-nav-item route="dashboard" icon="house" title="Dashboards" />
-                @endcan
+                @endcan --}}
 
                 @can('questions-list')
                     <x-nav-item route="questions.index" active='questions.*' icon="question" title="Question" />
                 @endcan
 
-                @can('plans-list')
+                {{-- @can('plans-list')
                     <x-nav-item route="plans.index" active='plans.*' icon="clipboard-text" title="Plans" />
-                @endcan
+                @endcan --}}
 
                 @can('relations-list')
                     <x-nav-item route="relations.index" active='relations.*' icon="link" title="Relations" />
                 @endcan
 
                 {{--
-
                 @can('users-list')
                     <x-nav-item route="users" icon="users" title="Users" />
                 @endcan
+
 
                 @can('users-list')
                     <x-nav-item route="users" icon="users" title="Users" />
@@ -60,9 +60,9 @@
 
                 --}}
 
-                @can('roles-list')
+                {{-- @can('roles-list')
                     <x-nav-item route="roles.index" active='roles.*' icon="lock" title="Roles" />
-                @endcan
+                @endcan --}}
 
 
 
